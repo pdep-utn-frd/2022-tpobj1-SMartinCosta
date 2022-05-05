@@ -8,10 +8,12 @@ object juego{
 		game.width(12)
 		game.height(8)
 		game.title("Dino Game")
+		game.boardGround('fondodinogame.jpg')
 		game.addVisual(suelo)
 		game.addVisual(cactus)
 		game.addVisual(dino)
 		game.addVisual(reloj)
+		game.addVisual(moneda)
 	
 		keyboard.space().onPressDo{ self.jugar()}
 		
@@ -23,6 +25,7 @@ object juego{
 		dino.iniciar()
 		reloj.iniciar()
 		cactus.iniciar()
+		moneda.iniciar()
 	}
 	
 	method jugar(){
@@ -39,6 +42,7 @@ object juego{
 		game.addVisual(gameOver)
 		cactus.detener()
 		reloj.detener()
+		moneda.detener()
 		dino.morir()
 	}
 	
@@ -56,7 +60,7 @@ object reloj {
 	var tiempo = 0
 	
 	method text() = tiempo.toString()
-	method position() = game.at(1, game.height()-1)
+	method position() = game.at(dino.position().x(),dino.position().y()+1)
 	
 	method pasarTiempo() {
 		tiempo = tiempo +1
@@ -135,5 +139,31 @@ object dino {
 	}
 	method estaVivo() {
 		return vivo
+	}
+}
+
+object moneda {
+	const posicionInicial = game.at(game.width()-3,suelo.position().y())
+	var position = posicionInicial
+	method image() = "moneda.png"
+	method position() = position
+	
+	method iniciar(){
+		position = posicionInicial
+		game.onTick(velocidad,"moverMoneda",{self.mover()})
+	}
+	
+	method mover(){
+		position = position.left(1)
+		if (position.x() == -1)
+			position = posicionInicial
+	}
+	method chocar(){
+		dino.subir()
+		game.schedule(velocidad*12,{dino.bajar()})
+		}
+		
+	method detener(){
+		game.removeTickEvent("moverMoneda")
 	}
 }
