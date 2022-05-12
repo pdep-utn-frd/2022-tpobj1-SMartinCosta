@@ -143,27 +143,27 @@ object dino {
 }
 
 object moneda {
-	const posicionInicial = game.at(game.width()-3,suelo.position().y())
-	var position = posicionInicial
+	var position = self.posicionInicial()
 	method image() = "moneda.png"
 	method position() = position
 	
+	method posicionInicial() = game.at(game.width()-3,suelo.position().y())
 	method iniciar(){
-		position = posicionInicial
+		position = self.posicionInicial()
 		game.onTick(velocidad,"moverMoneda",{self.mover()})
 	}
 	
 	method mover(){
 		position = position.left(1)
 		if (position.x() == -1)
-			position = posicionInicial
+			position = self.posicionInicial()
 	}
 	method chocar(){
 		dino.subir()
 		game.schedule(velocidad*12,{dino.bajar()})
 		}
 		
-	method detener(){
+	method detenerself.posicionInicial()
 		game.removeTickEvent("moverMoneda")
 	}
 }
