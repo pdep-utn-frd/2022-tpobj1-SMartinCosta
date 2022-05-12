@@ -163,7 +163,7 @@ object moneda {
 		game.schedule(velocidad*12,{dino.bajar()})
 		}
 		
-	method detenerself.posicionInicial()
+	method detener(){
 		game.removeTickEvent("moverMoneda")
 	}
 }
